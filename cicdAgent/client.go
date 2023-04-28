@@ -23,7 +23,7 @@ type ClientInfo sp.ClientInfo
 func main() {
 	f := "/tmp/agent.log"
 	alogger.InitLogger(f)
-	CONNECT := "10.200.24.109:12122"
+	CONNECT := "serverip:12122"
 	connTimeout := 2 * time.Second
 	for {
 		conn, err := net.DialTimeout("tcp", CONNECT, connTimeout)
