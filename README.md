@@ -83,7 +83,7 @@ The one with customizable and flexible CD system
     script: mvn package -Dmaven.test.skip=true
     
     
-  6.agent需要安装docker环境，定义好镜像仓库等。
+  6.agent所在服务器需要安装docker环境,安装git,定义好镜像仓库,定义git仓库等
   
     cicdAgent/deal_image/dealImage.go中修改镜像仓库的地址，用户名，密码等
     
