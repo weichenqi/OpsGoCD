@@ -65,7 +65,7 @@ func sendHeartBeat(conn net.Conn) {
 			alogger.Error("disconnect from server " + err.Error())
 			break
 		}
-		//5秒钟发送一个心跳包保活
+		//send heartbeat pre 5 sec
 		time.Sleep(5 * time.Second)
 
 		alogger.Info("Send to server " + string(js))
