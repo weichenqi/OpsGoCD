@@ -84,7 +84,9 @@ The one with customizable and flexible CD system
     
     
   6.agent需要安装docker环境，定义好镜像仓库等。
+  
     cicdAgent/deal_image/dealImage.go中修改镜像仓库的地址，用户名，密码等
+    
     cicdAgen/deal_code/dealCode.go中修改git仓库信息，考虑通用性使用http连接，用户名，密码的方式
   
   
