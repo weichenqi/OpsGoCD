@@ -27,7 +27,7 @@ const GitPassword = "******"
 type DeployBasicInfo sp.DeployBasicInfo
 type Conf sp.Ci
 
-func (di *DeployBasicInfo) CloneCode() (cloneStats int) {
+func (di *DeployBasicInfo) CloneCode() (cloneState int) {
 	codeDir := "/tmp/" + di.ProjectName + "-" + di.Branch
 	dr, err := os.Open(codeDir)
 	defer dr.Close()
@@ -177,8 +177,8 @@ func (di *DeployBasicInfo) DeployGo() (deployStat int) {
 func DoDeployTask(di *DeployBasicInfo) (s int) {
 	f := "/tmp/" + di.TaskId + "_deploy.log"
 	dlogger.InitLogger(f)
-	cloneStats := di.CloneCode()
-	if cloneStats == 1 {
+	cloneState := di.CloneCode()
+	if cloneState == 1 {
 		conf, _ := di.YamlFileParser()
 		di.DeployCmd = strings.Split(conf.Build.Script, " ")
 		di.DeployBaseImage = conf.Build.Image

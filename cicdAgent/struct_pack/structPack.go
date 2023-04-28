@@ -19,7 +19,7 @@ type AgentDeployInfo struct {
 	TaskId        string `json:"taskId"`
 	StartTime     string `json:"startTime"`
 	TaskInfo      string `json:"taskInfo"`
-	TaskStats     int    `json:"taskStats"`
+	TaskState     int    `json:"taskState"`
 	PushImageName string `json:"pushImageName"`
 }
 

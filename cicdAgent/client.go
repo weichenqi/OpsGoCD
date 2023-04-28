@@ -23,7 +23,7 @@ type ClientInfo sp.ClientInfo
 func main() {
 	f := "/tmp/agent.log"
 	alogger.InitLogger(f)
-	CONNECT := "serverip:12122"
+	CONNECT := "serverIp:12122"
 	connTimeout := 2 * time.Second
 	for {
 		conn, err := net.DialTimeout("tcp", CONNECT, connTimeout)
@@ -65,7 +65,7 @@ func sendHeartBeat(conn net.Conn) {
 			alogger.Error("disconnect from server " + err.Error())
 			break
 		}
-		//send heartbeat pre 5 sec
+		//5秒钟发送一个心跳包保活
 		time.Sleep(5 * time.Second)
 
 		alogger.Info("Send to server " + string(js))
@@ -74,7 +74,6 @@ func sendHeartBeat(conn net.Conn) {
 	}
 }
 
-// deal heartbeat request
 func clientHandleConn(conn net.Conn) {
 	defer conn.Close()
 	readChan := make(chan string, 1)
@@ -99,18 +98,18 @@ func clientHandleConn(conn net.Conn) {
 				ts := time.Now().Unix()
 				taskId := deployTask["taskId"]
 				startTime := time.Now().Format("2006-01-02 15:04:05")
-				taskStat := 100
+				taskState := 100
 				taskInfo := "Deploying"
 				deployRunningNum += 1
-				ms1 := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "deployStats", DeployRunningNum: float64(deployRunningNum), AgentDeployInfo: sp.AgentDeployInfo(AgentDeployInfo{TaskId: taskId, StartTime: startTime, TaskInfo: taskInfo, TaskStats: taskStat})}
+				ms1 := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "deployState", DeployRunningNum: float64(deployRunningNum), AgentDeployInfo: sp.AgentDeployInfo(AgentDeployInfo{TaskId: taskId, StartTime: startTime, TaskInfo: taskInfo, TaskState: taskState})}
 				strDate := strutcToJson(ms1)
 				writeChan <- strDate
 				deployResult, deployTaskId, deployDetails, pushImageName := dealDeployTask(deployTask)
 				ts = time.Now().Unix()
-				taskStat = deployResult
+				taskState = deployResult
 				taskInfo = deployDetails
 				deployRunningNum -= 1
-				ms2 := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "deployStats", DeployRunningNum: float64(deployRunningNum), AgentDeployInfo: sp.AgentDeployInfo(AgentDeployInfo{TaskId: deployTaskId, StartTime: startTime, TaskInfo: taskInfo, TaskStats: taskStat, PushImageName: pushImageName})}
+				ms2 := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "deployState", DeployRunningNum: float64(deployRunningNum), AgentDeployInfo: sp.AgentDeployInfo(AgentDeployInfo{TaskId: deployTaskId, StartTime: startTime, TaskInfo: taskInfo, TaskState: taskState, PushImageName: pushImageName})}
 				strDate = strutcToJson(ms2)
 				writeChan <- strDate
 			}()
@@ -160,8 +159,8 @@ func dealDeployTask(deployTask map[string]string) (deployResult int, taskId, dep
 	di.BranchName = branchName
 	di.Branch = branch
 	di.GithttpUrl = githttpUrl
-	deployStats := dcode.DoDeployTask((*dcode.DeployBasicInfo)(di))
-	if deployStats == 1 {
+	deployState := dcode.DoDeployTask((*dcode.DeployBasicInfo)(di))
+	if deployState == 1 {
 		res, imageName := dimg.DoImageTask((*dimg.DeployBasicInfo)(di))
 		if res == 1 {
 			deployResult = 1

@@ -63,13 +63,13 @@ func InsertTask(sqldb *sql.DB, deployTaskDetails *DeployTaskDetails) {
 }
 
 // deploy task init state
-func UpdateTaskInitStats(sqldb *sql.DB, deployTaskDetails *DeployTaskDetails) {
+func UpdateTaskInitState(sqldb *sql.DB, deployTaskDetails *DeployTaskDetails) {
 	db := bun.NewDB(sqldb, mysqldialect.New())
 	taskId := deployTaskDetails.TaskId
 	startTime := "0000-00-00 00:00:00"
-	deployStats := 200
+	deployState := 200
 	deployDetails := "waiting for deploy"
-	task := DeployTaskState{TaskId: taskId, StartTime: startTime, DeployState: float64(deployStats), DeployDetails: deployDetails}
+	task := DeployTaskState{TaskId: taskId, StartTime: startTime, DeployState: float64(deployState), DeployDetails: deployDetails}
 	res, err := db.NewInsert().Model(&task).Exec(ctx)
 	if err != nil {
 		//fmt.Println(err)
@@ -82,15 +82,15 @@ func UpdateTaskInitStats(sqldb *sql.DB, deployTaskDetails *DeployTaskDetails) {
 }
 
 // deploy task state
-func UpdateTaskStats(sqldb *sql.DB, deployTaskState *DeployTaskState) {
+func UpdateTaskState(sqldb *sql.DB, deployTaskState *DeployTaskState) {
 	db := bun.NewDB(sqldb, mysqldialect.New())
 	taskId := deployTaskState.TaskId
 	startTime := deployTaskState.StartTime
 	deployNode := deployTaskState.NodeId
-	deployStats := deployTaskState.DeployState
+	deployState := deployTaskState.DeployState
 	deployDetails := deployTaskState.DeployDetails
 	pushImageName := deployTaskState.PushImageName
-	task := DeployTaskState{TaskId: taskId, StartTime: startTime, NodeId: deployNode, DeployState: deployStats, DeployDetails: deployDetails, PushImageName: pushImageName}
+	task := DeployTaskState{TaskId: taskId, StartTime: startTime, NodeId: deployNode, DeployState: deployState, DeployDetails: deployDetails, PushImageName: pushImageName}
 	res, err := db.NewInsert().
 		Model(&task).
 		On("DUPLICATE KEY UPDATE").
@@ -104,7 +104,7 @@ func UpdateTaskStats(sqldb *sql.DB, deployTaskState *DeployTaskState) {
 }
 
 // agent state from heartbeat
-func UpdateNodeStats(sqldb *sql.DB, deployNodeState *DeployNodeState) {
+func UpdateNodeState(sqldb *sql.DB, deployNodeState *DeployNodeState) {
 	db := bun.NewDB(sqldb, mysqldialect.New())
 	nodeId := deployNodeState.NodeId
 	hostName := deployNodeState.HostName
@@ -119,6 +119,6 @@ func UpdateNodeStats(sqldb *sql.DB, deployNodeState *DeployNodeState) {
 		dlogger.Error(err.Error())
 	} else {
 		l, _ := res.RowsAffected()
-		dlogger.Info("update agent stats success " + strconv.FormatInt(l, 10))
+		dlogger.Info("update agent state success " + strconv.FormatInt(l, 10))
 	}
 }

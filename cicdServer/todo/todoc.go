@@ -12,11 +12,11 @@ type DeployTaskState sp.DeployTaskState
 type DeployNodeState sp.DeployNodeState
 
 func (cl *DeployNodeState) DealHeartbeat(sqldb *sql.DB) {
-	doMysql.UpdateNodeStats(sqldb, (*doMysql.DeployNodeState)(cl))
+	doMysql.UpdateNodeState(sqldb, (*doMysql.DeployNodeState)(cl))
 }
 
 func (cl *DeployTaskState) DealDeployResult(sqldb *sql.DB) {
-	doMysql.UpdateTaskStats(sqldb, (*doMysql.DeployTaskState)(cl))
+	doMysql.UpdateTaskState(sqldb, (*doMysql.DeployTaskState)(cl))
 
 }
 
@@ -44,7 +44,7 @@ func DealClientPackage(cinfoJson string, sqldb *sql.DB) (ct, cp string, num floa
 		num = clinfo.LoadNum
 		ct = m["clientToken"].(string)
 		return ct, cp, num
-	} else if category == "deployStats" {
+	} else if category == "deployState" {
 		ct = m["clientToken"].(string)
 		dlinfo := new(DeployTaskState)
 		agentInfoMap := m["agentDeployInfo"].(map[string]interface{})
@@ -52,7 +52,7 @@ func DealClientPackage(cinfoJson string, sqldb *sql.DB) (ct, cp string, num floa
 		dlinfo.StartTime = agentInfoMap["startTime"].(string)
 		dlinfo.NodeId = m["nodeId"].(string)
 		dlinfo.DeployDetails = agentInfoMap["taskInfo"].(string)
-		dlinfo.DeployState = agentInfoMap["taskStats"].(float64)
+		dlinfo.DeployState = agentInfoMap["taskState"].(float64)
 		dlinfo.PushImageName = agentInfoMap["pushImageName"].(string)
 		dlinfo.DealDeployResult(sqldb)
 	}

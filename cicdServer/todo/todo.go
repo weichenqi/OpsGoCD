@@ -33,7 +33,7 @@ func (sq *DeployTaskDetails) AddTaskDB(sqldb *sql.DB) {
 
 func (sq *DeployTaskDetails) AddTaskInitState(sqldb *sql.DB) {
 	//sqldb := doMysql.InitConn()
-	doMysql.UpdateTaskInitStats(sqldb, (*doMysql.DeployTaskDetails)(sq))
+	doMysql.UpdateTaskInitState(sqldb, (*doMysql.DeployTaskDetails)(sq))
 }
 
 func AddDeployTask(sq *DeployTaskDetails, sqldb *sql.DB, rdb *redis.Client) {
