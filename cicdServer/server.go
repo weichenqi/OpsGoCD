@@ -19,7 +19,7 @@ const (
 	path        = "/webhooks"
 	logFile     = "/tmp/server.log"
 	dbLogFile   = "/tmp/db.log"
-	clientToken = "hhHA6VcuTg8QIjVpsUB7eHhWmc7A0pTi"
+	clientToken = "hhHA6VcuTg8QIjVpsUB7eHhWmc7A0pTi". //客户端和服务端交互的简单认证，两边一样即可，不要纠结token本身。
 )
 
 var sqldb = doMysql.InitConn()
@@ -53,7 +53,7 @@ func tcpDeployServer() {
 }
 
 func gitLabWebhook() {
-	hook, _ := gitlab.New(gitlab.Options.Secret("wcq1984!@#"))
+	hook, _ := gitlab.New(gitlab.Options.Secret("*****"))
 
 	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
 		payload, err := hook.Parse(r, gitlab.PushEvents)
