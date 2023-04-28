@@ -11,28 +11,27 @@
  Target Server Version : 101102 (10.11.2-MariaDB)
  File Encoding         : 65001
 
- Date: 28/04/2023 16:36:28
+ Date: 28/04/2023 16:36:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for deploy_task_details
+-- Table structure for deploy_task_states
 -- ----------------------------
-DROP TABLE IF EXISTS `deploy_task_details`;
-CREATE TABLE `deploy_task_details` (
+DROP TABLE IF EXISTS `deploy_task_states`;
+CREATE TABLE `deploy_task_states` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `task_id` varchar(64) NOT NULL COMMENT '构建任务id',
-  `push_date` varchar(128) NOT NULL DEFAULT '' COMMENT '任务提交时间',
-  `project_name` varchar(128) NOT NULL COMMENT '项目名字',
-  `branch_name` varchar(128) NOT NULL COMMENT '项目分支版本',
-  `branch` varchar(255) NOT NULL,
-  `git_ssh_url` varchar(128) NOT NULL COMMENT 'ssh格式url',
-  `git_http_url` varchar(128) NOT NULL COMMENT 'http格式url',
-  `push_user_name` varchar(32) NOT NULL COMMENT '提交的用户名',
+  `start_time` datetime DEFAULT '0000-00-00 00:00:00' COMMENT '构建任务开始时间',
+  `node_id` varchar(255) DEFAULT NULL,
+  `deploy_state` int(11) NOT NULL COMMENT '构建实时状态',
+  `deploy_details` varchar(255) NOT NULL COMMENT '构建状态详情',
+  `push_image_name` varchar(255) DEFAULT NULL,
+  `update_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp() COMMENT '记录更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `taskid` (`task_id`) COMMENT '任务id索引'
-) ENGINE=InnoDB AUTO_INCREMENT=295 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=519 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
