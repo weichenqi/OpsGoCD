@@ -14,6 +14,49 @@ The one with customizable and flexible CD system
      补充ing
      
 ### 部署：
+  0.启用git的webhook功能，相关代码段在
+  
+  cicdServer/server.go
+  
+    func gitLabWebhook() {
+	hook, _ := gitlab.New(gitlab.Options.Secret("*****"))
+
+	http.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
+		payload, err := hook.Parse(r, gitlab.PushEvents)
+		if err != nil {
+			if err == gitlab.ErrEventNotFound {
+			}
+		}
+
+		switch payload.(type) {
+
+		case gitlab.PushEventPayload:
+			release := payload.(gitlab.PushEventPayload)
+			pushDate := release.Commits[0].Timestamp.String()
+			projectName := strings.Split(release.Repository.Name, "/")[0]
+			branch := strings.Split(release.Ref, "/")[2]
+			branchName := release.Ref
+			gitSshUrl := release.Repository.GitSSHURL
+			gitHttpUrl := release.Repository.GitHTTPURL
+			pushUserName := release.UserUsername
+			//insert task to redis and mysql
+			dtd := new(todo.DeployTaskDetails)
+			dtd.TaskId = tools.CreateTaskId()
+			dtd.PushDate = tools.UtcDateConvert(pushDate)
+			dtd.ProjectName = projectName
+			dtd.BranchName = branchName
+			dtd.Branch = branch
+			dtd.GitSshUrl = gitSshUrl
+			dtd.GitHttpUrl = gitHttpUrl
+			dtd.PushUserName = pushUserName
+			todo.AddDeployTask(dtd, sqldb, rdb)
+		}
+
+	})
+	http.ListenAndServe(":6060", nil)
+}
+  
+  
   1.部署mysql，版本随意，主流版本即可，导入三个sql。
   
   2.部署redis，版本随意，主流版本即可。
