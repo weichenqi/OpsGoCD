@@ -14,7 +14,7 @@ The one with customizable and flexible CD system
 
 ![Image text](https://github.com/weichenqi/OpsGoCD/blob/main/a.png)
 
-设计流程，webHook Server收到来自git仓库的push event后插入task_details和task_stats两张表，然后写入task_list队列。工作节点（agent）每个5秒发送一个心跳包给Tcp Server，更新agent_states表，服务端收到客户端的心跳包后判断agent是否合法，任务并发是否小于等于3；
+设计流程，webHook Server收到来自git仓库的push event后插入task_details和task_states两张表，然后写入task_list队列。工作节点（agent）每个5秒发送一个心跳包给Tcp Server，更新agent_states表，服务端收到客户端的心跳包后判断agent是否合法，任务并发是否小于等于3；
 满足条件后，从task_list中取构建任务返回给agent（如果task_list没有任务，不返回）；agent继续每隔五秒钟发送心跳包，主要是当前agent的并发任务量，同时更新node_states表。由于每个任务由自己的协程管理，所以每个构建任务会单独发送deploaystate的包告诉服务端任务构建成功与否，同时更新agent_states表。
 
 
