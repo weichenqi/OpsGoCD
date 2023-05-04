@@ -58,7 +58,7 @@ func sendHeartBeat(conn net.Conn) {
 	md5HostName, hostName := getHostName()
 	for {
 		ts := time.Now().Unix()
-		ms := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "heartbeat", DeployRunningNum: float64(deployRunningNum), AgentDeployInfo: sp.AgentDeployInfo(AgentDeployInfo{})}
+		ms := &ClientInfo{ClientToken: clientToken, NodeId: md5HostName, HostName: hostName, LastUpdate: ts, Category: "heartbeat", DeployRunningNum: float64(deployRunningNum)}
 		js, _ := json.Marshal(ms)
 		_, err := conn.Write([]byte(js))
 		if err != nil {
