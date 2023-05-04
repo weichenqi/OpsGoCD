@@ -11,9 +11,7 @@ The one with customizable and flexible CD system
 可以扩充大量工作节点，并可以高度自定义流水线环节的CD系统，目前功能主要从提交代码到上传镜像仓库为止，相关状态数据已经入库，可以通过开发界面，加入审批等功能，形成一个可视化的CI/CD系统。
 
 ### 设计图
-     <img width="2234" alt="image" src="https://user-images.githubusercontent.com/15993498/236095863-705ecad7-e94c-4bff-81e2-c131af11c620.png">
-     软件架构逻辑：webHook server端收到来自git仓库的push event后，先写入task_details表，再写task_states表，最后写task队列。工作节点（agent）每隔5秒钟发送一个心跳包到TcpServer，server端收到心跳包后做下token验证和agent的负载（是否小于等于3），
-     匹配后从任务队列里取出一个任务返回给agent（没有就返回任务），agent开始在本机开始构建，构建完成后，发送构建任务包告诉服务端，任务完成与否。
+     更新中
 
      
 ### 部署：
