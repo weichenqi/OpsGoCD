@@ -19,7 +19,7 @@ const (
 	path        = "/webhooks"
 	logFile     = "/tmp/server.log"
 	dbLogFile   = "/tmp/db.log"
-	clientToken = "hhHA6VcuTg8QIjVpsUB7eHhWmc7A0pTi". //客户端和服务端交互的简单认证，两边一样即可，不要纠结token本身。
+	clientToken = "hhHA6VcuTg8QIjVpsUB7eHhWmc7A0pTi" //客户端和服务端交互的简单认证，两边一样即可，不要纠结token本身。
 )
 
 var sqldb = doMysql.InitConn()
