@@ -4,7 +4,7 @@ The one with customizable and flexible CD system
 
 ### 项目名字来源
  
-一个ops用golang写的一个CD（CI）系统，功能未完善且比较初级，不喜勿喷。
+一个ops用golang写的一个CD（CI）系统，功能待完善。
 
 ### 功能：
 
@@ -143,7 +143,7 @@ The one with customizable and flexible CD system
   7.分别编译运行server端和agent端。
   
   
-  8.go初学者，没有做test case，抱歉。
+  8.没有做test case，抱歉。
   
   9.待完成工作，支持golang和python。
   
